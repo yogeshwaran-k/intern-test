@@ -5,9 +5,9 @@ function TestPage({ student, questions, setStage, setResults, showModal }) {
   const [timeLeft, setTimeLeft] = useState(30 * 60);
   const [answers, setAnswers] = useState({});
   const [cheatingLog, setCheatingLog] = useState([]);
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
   useEffect(() => {
-    // Timer
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 0) {
@@ -19,7 +19,6 @@ function TestPage({ student, questions, setStage, setResults, showModal }) {
       });
     }, 1000);
 
-    // Cheating prevention
     const logCheating = (action) => {
       setCheatingLog((log) => [
         ...log,
@@ -69,7 +68,7 @@ function TestPage({ student, questions, setStage, setResults, showModal }) {
     }));
 
     try {
-      const res = await fetch('http://localhost:5000/api/submit', {
+      const res = await fetch(`${API_BASE_URL}/api/submit`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -2,9 +2,10 @@ import { useState } from 'react';
 
 function IdEntry({ setStage, setStudent, setQuestions, showModal, closeModal }) {
   const [id, setId] = useState('');
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000'; // Use env variable
 
   const handleSubmit = async () => {
-    const res = await fetch('http://localhost:5000/api/validate-id', {
+    const res = await fetch(`${API_BASE_URL}/api/validate-id`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id })
@@ -21,7 +22,7 @@ function IdEntry({ setStage, setStudent, setQuestions, showModal, closeModal }) 
       async () => {
         try {
           setStudent({ id, name: data.name, domain: data.domain });
-          const qRes = await fetch('http://localhost:5000/api/questions', {
+          const qRes = await fetch(`${API_BASE_URL}/api/questions`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ domain: data.domain })
@@ -29,7 +30,7 @@ function IdEntry({ setStage, setStudent, setQuestions, showModal, closeModal }) 
           if (!qRes.ok) throw new Error('Failed to fetch questions');
           setQuestions(await qRes.json());
           setStage('test');
-          closeModal(); // Close modal after confirmation
+          closeModal();
         } catch (err) {
           showModal('Error', 'Failed to load test. Please try again.');
         }
