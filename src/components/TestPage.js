@@ -1,4 +1,4 @@
-  import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ProgressBar } from 'react-bootstrap';
 
 function TestPage({ student, questions, setStage, setResults, showModal }) {
@@ -6,6 +6,32 @@ function TestPage({ student, questions, setStage, setResults, showModal }) {
   const [answers, setAnswers] = useState({});
   const [cheatingLog, setCheatingLog] = useState([]);
   const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
+  // Wrap handleSubmit in useCallback to prevent redefinition on every render
+  const handleSubmit = useCallback(async () => {
+    const formattedAnswers = Object.keys(answers).map((qId) => ({
+      questionId: parseInt(qId),
+      selected: answers[qId]
+    }));
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/submit`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: student.id,
+          answers: formattedAnswers,
+          cheatingLog
+        })
+      });
+
+      if (!res.ok) throw new Error('Submission failed');
+      setResults(await res.json());
+      setStage('results');
+    } catch (err) {
+      showModal('Error', 'Failed to submit test. Please try again.');
+    }
+  }, [answers, cheatingLog, student.id, setResults, setStage, showModal]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -55,35 +81,10 @@ function TestPage({ student, questions, setStage, setResults, showModal }) {
       document.removeEventListener('copy', handleCopyPaste);
       document.removeEventListener('paste', handleCopyPaste);
     };
-  }, [showModal, handleSubmit]); // Include handleSubmit as a dependency
+  }, [handleSubmit, showModal]);
 
   const handleAnswer = (questionId, selected) => {
     setAnswers({ ...answers, [questionId]: selected });
-  };
-
-  const handleSubmit = async () => {
-    const formattedAnswers = Object.keys(answers).map((qId) => ({
-      questionId: parseInt(qId),
-      selected: answers[qId]
-    }));
-
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/submit`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id: student.id,
-          answers: formattedAnswers,
-          cheatingLog
-        })
-      });
-
-      if (!res.ok) throw new Error('Submission failed');
-      setResults(await res.json());
-      setStage('results');
-    } catch (err) {
-      showModal('Error', 'Failed to submit test. Please try again.');
-    }
   };
 
   const answeredCount = Object.keys(answers).length;
