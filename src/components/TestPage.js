@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+  import { useState, useEffect } from 'react';
 import { ProgressBar } from 'react-bootstrap';
 
 function TestPage({ student, questions, setStage, setResults, showModal }) {
@@ -12,7 +12,7 @@ function TestPage({ student, questions, setStage, setResults, showModal }) {
       setTimeLeft((prev) => {
         if (prev <= 0) {
           clearInterval(timer);
-          handleSubmit();
+          handleSubmit(); // Submit when time is up
           return 0;
         }
         return prev - 1;
@@ -55,7 +55,7 @@ function TestPage({ student, questions, setStage, setResults, showModal }) {
       document.removeEventListener('copy', handleCopyPaste);
       document.removeEventListener('paste', handleCopyPaste);
     };
-  }, [showModal]);
+  }, [showModal, handleSubmit]); // Include handleSubmit as a dependency
 
   const handleAnswer = (questionId, selected) => {
     setAnswers({ ...answers, [questionId]: selected });
