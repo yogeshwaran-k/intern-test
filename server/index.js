@@ -8,7 +8,7 @@ app.use(express.json());
 
 // In-memory data (replace JSON files)
 const students = [
-  { id:'SH202511OCTIN01', name:'S Nikitha Sri', domain: 'AI' },
+  { id:'SH202511OCTIN01', name:'S Nikitha Sri', domain: 'Artificial Intelligence' },
   { id:'SH202511OCTIN02', name:'S Raghavi', domain: 'Computer Networking' },
   { id:'SH202511OCTIN03', name:'R Rajarajesvari', domain: 'Python & Java' },
   { id:'SH202511OCTIN04', name:'M S Sahana', domain: 'Full Stack Development' },
