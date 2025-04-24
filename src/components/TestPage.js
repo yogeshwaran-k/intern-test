@@ -84,7 +84,7 @@ function TestPage({ student, questions, setStage, setResults, showModal }) {
       document.removeEventListener('copy', handleCopyPaste);
       document.removeEventListener('paste', handleCopyPaste);
     };
-  }, [handleSubmit, showModal]); // Add handleSubmit as a dependency
+  }, [handleSubmit, showModal]);
 
   const answeredCount = Object.keys(answers).length;
   const progress = (answeredCount / questions.length) * 100;
