@@ -7,7 +7,10 @@ function TestPage({ student, questions, setStage, setResults, showModal }) {
   const [cheatingLog, setCheatingLog] = useState([]);
   const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
-  // Wrap handleSubmit in useCallback to prevent redefinition on every render
+  const handleAnswer = (questionId, selected) => {
+    setAnswers({ ...answers, [questionId]: selected });
+  };
+
   const handleSubmit = useCallback(async () => {
     const formattedAnswers = Object.keys(answers).map((qId) => ({
       questionId: parseInt(qId),
@@ -31,14 +34,14 @@ function TestPage({ student, questions, setStage, setResults, showModal }) {
     } catch (err) {
       showModal('Error', 'Failed to submit test. Please try again.');
     }
-  }, [answers, cheatingLog, student.id, setResults, setStage, showModal]);
+  }, [answers, cheatingLog, student.id, setResults, setStage, showModal, API_BASE_URL]);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 0) {
           clearInterval(timer);
-          handleSubmit(); // Submit when time is up
+          handleSubmit();
           return 0;
         }
         return prev - 1;
@@ -81,11 +84,7 @@ function TestPage({ student, questions, setStage, setResults, showModal }) {
       document.removeEventListener('copy', handleCopyPaste);
       document.removeEventListener('paste', handleCopyPaste);
     };
-  }, [handleSubmit, showModal]);
-
-  const handleAnswer = (questionId, selected) => {
-    setAnswers({ ...answers, [questionId]: selected });
-  };
+  }, [handleSubmit, showModal]); // Add handleSubmit as a dependency
 
   const answeredCount = Object.keys(answers).length;
   const progress = (answeredCount / questions.length) * 100;
