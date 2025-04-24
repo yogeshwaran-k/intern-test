@@ -146,7 +146,6 @@ const questions =[
   { id: 123, domain: 'Python & Java', question: 'Which keyword is used to stop a loop in Python?', options: ['exit', 'break', 'return', 'stop'], correct: 1 },
   { id: 124, domain: 'Python & Java', question: 'What is indentation used for in Python?', options: ['To improve readability', 'To separate files', 'To declare variables', 'To define blocks of code'], correct: 3 },
   { id: 125, domain: 'Python & Java', question: 'Which keyword is used to inherit a class in Java?', options: ['super', 'inherits', 'extends', 'from'], correct: 2 }
-]
 ];
 
 let results = []; // In-memory results (will reset on server restart)
