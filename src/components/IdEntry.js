@@ -16,8 +16,8 @@ function IdEntry({ setStage, setStudent, setQuestions, showModal, closeModal }) 
       return;
     }
    showModal(
-  'Confirm Identity',
-  `Is this you? <strong>${data.name}</strong><br>Opted for <em>${data.domain}</em>`,
+    'Confirm Identity',
+  `Is this you? ${data.name}\nOpted for ${data.domain}`,
       true,
       async () => {
         try {
